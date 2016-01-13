@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import paramiko
+import logging
 from bcolors import bcolor
 
 class Test:
@@ -9,7 +10,11 @@ class Test:
     password = 'tianqi'
     connector = None
 
-    def __init__(self):
+    def __init__(self, host, port, username, pwd):
+        self.host = host
+        self.port = port
+        self.username = username
+        self.password = pwd
         paramiko.util.log_to_file('paramiko_util.log')
     def connect(self):
         """
@@ -39,12 +44,11 @@ class Test:
             except paramiko.SSHException as e:
                 print e
 
-    def close(self):
+    def __del__(self):
         if self.connector:
             self.connector.close()
 
-test = Test()
+test = Test('192.168.2.161', 22, 'tianqi', 'tianqi')
 test.connect()
 test.run_command("ls")
 test.run_command('cat /proc/meminfo')
-test.close()
