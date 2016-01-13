@@ -1,10 +1,10 @@
 #-*- coding: utf-8 -*-
-
+import socket
 import paramiko
 import logging
 from bcolors import bcolor
 
-class Test:
+class Connector:
     def __init__(self, host, port, username, pwd):
         self.host = host
         self.port = port
@@ -26,8 +26,15 @@ class Test:
                 password=self.password)
 
             print 'connect success to',self.host
-        except Exception as e:
-            raise Exception(("Connection Failed"))
+        except paramiko.BadHostKeyException as e:
+            print 'BadHostKeyException'
+        except paramiko.AuthenticationException as e:
+            print 'AuthenticationException'
+        except paramiko.SSHException as e:
+            print e
+        except socket.error as e:
+            print e
+
     def run_command(self, cmd_str):
         if self.connector:
             try:
@@ -42,8 +49,3 @@ class Test:
     def __del__(self):
         if self.connector:
             self.connector.close()
-
-test = Test('192.168.2.161', 22, 'tianqi', 'tianqi')
-test.connect()
-test.run_command("ls")
-test.run_command('cat /proc/meminfo')
