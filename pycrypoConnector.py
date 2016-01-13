@@ -10,6 +10,7 @@ class Connector:
         self.port = port
         self.username = username
         self.password = pwd
+        self.shell = None
         paramiko.util.log_to_file('paramiko_util.log')
     def connect(self):
         """
@@ -35,7 +36,7 @@ class Connector:
         except socket.error as e:
             print e
 
-    def run_command(self, cmd_str):
+    def run_command_immediate(self, cmd_str):
         if self.connector:
             try:
                 stdin, stdout, stderr = self.connector.exec_command(cmd_str)
@@ -45,6 +46,15 @@ class Connector:
                 print '\n'
             except paramiko.SSHException as e:
                 print e
+    def run_command_interactive(self, cmd_list):
+        if self.connector:
+            if not self.shell:
+                self.shell = self.connector.invoke_shell()
+            for cmd in cmd_list:
+                print 'cmd ', cmd
+                self.shell.send(cmd)
+                receive_buf = self.shell.recv(1024)
+                print receive_buf
 
     def __del__(self):
         if self.connector:
