@@ -5,11 +5,6 @@ import logging
 from bcolors import bcolor
 
 class Test:
-    host = '192.168.2.161'
-    username = 'tianqi'
-    password = 'tianqi'
-    connector = None
-
     def __init__(self, host, port, username, pwd):
         self.host = host
         self.port = port
