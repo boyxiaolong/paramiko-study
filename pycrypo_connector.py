@@ -31,14 +31,19 @@ class Connector(object):
                 password=self.password)
 
             print 'connect success to',self.host
+            return True
         except paramiko.BadHostKeyException as e:
             print 'BadHostKeyException'
+            return False
         except paramiko.AuthenticationException as e:
             print 'AuthenticationException'
+            return False
         except paramiko.SSHException as e:
             print e
+            return False
         except socket.error as e:
             print e
+            return False
 
     def run_command_immediate(self, cmd_str):
         if self.connector:
