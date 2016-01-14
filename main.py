@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
-from pycrypoConnector import Connector
+
+from pycrypo_connector import Connector
 
 def test_conn():
     test = Connector('192.168.2.161', 22, 'tianqi', 'tianqi')

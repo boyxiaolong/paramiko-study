@@ -1,10 +1,14 @@
 #-*- coding: utf-8 -*-
 import socket
-import paramiko
 import logging
+import paramiko
 from bcolors import bcolor
 
-class Connector:
+class Connector(object):
+    """
+    Connector for paramiko client
+    """
+
     def __init__(self, host, port, username, pwd):
         self.host = host
         self.port = port
@@ -57,5 +61,7 @@ class Connector:
                 print receive_buf
 
     def __del__(self):
+        if self.shell:
+            self.shell.close()
         if self.connector:
             self.connector.close()
