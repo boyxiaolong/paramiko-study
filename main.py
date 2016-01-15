@@ -20,4 +20,5 @@ if __name__ == '__main__':
     #unittest.main()
     test = Connector('192.168.2.161', 22, 'tianqi', 'tianqi', 1)
     test.connect()
-    test.run_command_interactive_async()
+    test.get_logger().debug("end connect")
+    #test.run_command_interactive_async()

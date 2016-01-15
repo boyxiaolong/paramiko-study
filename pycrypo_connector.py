@@ -17,13 +17,15 @@ class Connector(object):
         self.password = pwd
         self.shell = None
         self.timeout = timeout
+        self.connector = paramiko.SSHClient()
         paramiko.util.log_to_file('paramiko_util.log')
+        self.logger = logging.getLogger("paramiko")
+
     def connect(self):
         """
         Connect to the device
         """
         try:
-            self.connector = paramiko.SSHClient()
             #if first connect to server the key is empty, and load next time
             self.connector.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             #self.connector.load_system_host_keys()
@@ -32,8 +34,8 @@ class Connector(object):
                 username=self.username,
                 password=self.password,
                 timeout=self.timeout)
-
-            print 'connect success to',self.host
+            self.logger = self.connector.get_transport().logger
+            self.logger.debug("connect success logic")
             return True
         except paramiko.BadHostKeyException as e:
             print 'BadHostKeyException'
@@ -58,6 +60,7 @@ class Connector(object):
                 print '\n'
             except paramiko.SSHException as e:
                 print e
+
     def run_command_interactive_syc(self, cmd_list):
         if self.connector:
             if not self.shell:
@@ -77,3 +80,6 @@ class Connector(object):
             self.shell.close()
         if self.connector:
             self.connector.close()
+
+    def get_logger(self):
+        return self.logger
