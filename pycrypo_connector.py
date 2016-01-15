@@ -3,6 +3,7 @@ import socket
 import logging
 import paramiko
 from bcolors import bcolor
+import interactive
 
 class Connector(object):
     """
@@ -24,7 +25,7 @@ class Connector(object):
             self.connector = paramiko.SSHClient()
             #if first connect to server the key is empty, and load next time
             self.connector.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            self.connector.load_system_host_keys()
+            #self.connector.load_system_host_keys()
             self.connector.connect(
                 hostname=self.host,
                 username=self.username,
@@ -55,7 +56,7 @@ class Connector(object):
                 print '\n'
             except paramiko.SSHException as e:
                 print e
-    def run_command_interactive(self, cmd_list):
+    def run_command_interactive_syc(self, cmd_list):
         if self.connector:
             if not self.shell:
                 self.shell = self.connector.invoke_shell()
@@ -64,7 +65,9 @@ class Connector(object):
                 self.shell.send(cmd)
                 receive_buf = self.shell.recv(1024)
                 print receive_buf
-
+    def run_command_interactive_async(self):
+        interactive.interactive_shell(self.shell)
+        return
     def __del__(self):
         if self.shell:
             self.shell.close()
