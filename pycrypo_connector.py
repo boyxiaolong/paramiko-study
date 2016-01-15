@@ -10,12 +10,13 @@ class Connector(object):
     Connector for paramiko client
     """
 
-    def __init__(self, host, port, username, pwd):
+    def __init__(self, host, port, username, pwd, timeout):
         self.host = host
         self.port = port
         self.username = username
         self.password = pwd
         self.shell = None
+        self.timeout = timeout
         paramiko.util.log_to_file('paramiko_util.log')
     def connect(self):
         """
@@ -29,7 +30,8 @@ class Connector(object):
             self.connector.connect(
                 hostname=self.host,
                 username=self.username,
-                password=self.password)
+                password=self.password,
+                timeout=self.timeout)
 
             print 'connect success to',self.host
             return True
@@ -66,6 +68,8 @@ class Connector(object):
                 receive_buf = self.shell.recv(1024)
                 print receive_buf
     def run_command_interactive_async(self):
+        if not self.shell:
+            self.shell = self.connector.invoke_shell()
         interactive.interactive_shell(self.shell)
         return
     def __del__(self):

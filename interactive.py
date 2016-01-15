@@ -39,7 +39,7 @@ def posix_shell(chan):
             r, w, e = select.select([chan, sys.stdin], [], [])
             if chan in r:
                 try:
-                    x = u(chan.recv(1024))
+                    x = (chan.recv(1024))
                     if len(x) == 0:
                         sys.stdout.write('\r\n*** EOF\r\n')
                         break

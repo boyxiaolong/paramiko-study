@@ -4,7 +4,7 @@ from pycrypo_connector import Connector
 
 class TestConn(unittest.TestCase):
     def setUp(self):
-        self.test = Connector('192.168.3.105', 22, 'allen', '123')
+        self.test = Connector('192.168.2.161', 22, 'tianqi', 'tianqi', 1)
         self.assertTrue(self.test.connect())
     def tearDown(self):
         print 'teardowo'
@@ -17,4 +17,7 @@ class TestConn(unittest.TestCase):
         self.test.run_command_interactive_async()
 
 if __name__ == '__main__':
-    unittest.main()
+    #unittest.main()
+    test = Connector('192.168.2.161', 22, 'tianqi', 'tianqi', 1)
+    test.connect()
+    test.run_command_interactive_async()
