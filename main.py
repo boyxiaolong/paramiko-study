@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import unittest
 from pycrypo_connector import Connector
+import ConfigParser
 
 class TestConn(unittest.TestCase):
     def setUp(self):
@@ -16,9 +17,12 @@ class TestConn(unittest.TestCase):
     def test_1(self):
         self.test.run_command_interactive_async()
 
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
+
 if __name__ == '__main__':
     #unittest.main()
-    test = Connector('192.168.2.161', 22, 'tianqi', 'tianqi', 1)
+    test = Connector(config.get('host1', 'host'), config.get('host1', 'port'), config.get('host1', 'usrname'), config.get('host1', 'pwd'), 1)
     test.connect()
     test.get_logger().debug("end connect")
     #test.run_command_interactive_async()
