@@ -22,7 +22,7 @@ config.read("config.ini")
 
 if __name__ == '__main__':
     #unittest.main()
-    test = Connector(config.get('host1', 'host'), config.get('host1', 'port'), config.get('host1', 'usrname'), config.get('host1', 'pwd'), 1)
+    test = Connector(config.get('host2', 'host'), config.get('host2', 'port'), config.get('host2', 'usrname'), config.get('host2', 'pwd'), 1)
     test.connect()
     test.get_logger().debug("end connect")
     #test.run_command_interactive_async()

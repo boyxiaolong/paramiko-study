@@ -27,7 +27,7 @@ class Connector(object):
         """
         try:
             #if first connect to server the key is empty, and load next time
-            self.connector.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            #self.connector.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             #self.connector.load_system_host_keys()
             self.connector.connect(
                 hostname=self.host,
