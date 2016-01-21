@@ -3,6 +3,7 @@ import time
 from multiprocessing import Process, Pool
 import paramiko
 from paramiko_client import ParamikoClient
+import gevent
 
 def func():
     client = ParamikoClient('config.ini')
@@ -16,5 +17,12 @@ def multi_process_test():
         results.append(pool.apply_async(func))
     pool.close()
     pool.join()
+
+def test_gevent():
+    gevent.joinall([
+    gevent.spawn(func),
+    gevent.spawn(func),])
+
 if __name__ == '__main__':
-    multi_process_test()
+    #multi_process_test()
+    test_gevent()
