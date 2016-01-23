@@ -6,10 +6,29 @@ from paramiko_client import ParamikoClient
 import gevent
 import ConfigParser
 
+task_num = 50
+begin = time.time()
+is_gevent = False
+
 def func():
+    global task_num
     client = ParamikoClient('config.ini')
     print client.connect()
     client.run_command('date')
+    task_num -= 1
+    if task_num == 0:
+        print 'elaspe ', time.time()-begin
+
+def gevent_func():
+    global task_num
+    client = ParamikoClient('config.ini')
+    gevent.sleep(0)
+    print client.connect()
+    gevent.sleep(0)
+    client.run_command('date')
+    task_num -= 1
+    if task_num == 0:
+        print 'elaspe ', time.time()-begin
 
 def multi_process_test():
     pool = Pool()
@@ -20,10 +39,16 @@ def multi_process_test():
     pool.join()
 
 def test_gevent():
-    gevent.joinall([
-    gevent.spawn(func),
-    gevent.spawn(func),])
+    global task_num
+    task_list = []
+    for i in range(task_num):
+        task_list.append(gevent.spawn(gevent_func))
+    gevent.joinall(task_list)
 
+def test_seq_task():
+    global task_num
+    for i in range(task_num):
+        func()
 last_total_req = 0
 files = {}
 
@@ -55,5 +80,6 @@ def test_get():
                     if name not in files:
                         sftp.get(remote_pre+name, local_pre+name)
 if __name__ == '__main__':
-    #multi_process_test()
-    test_get()
+    test_gevent()
+    #test_get()
+    #test_seq_task()
