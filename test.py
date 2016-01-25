@@ -5,19 +5,24 @@ import paramiko
 from paramiko_client import ParamikoClient
 import gevent
 import ConfigParser
+import threading
 
-task_num = 50
+task_num = 10
 begin = time.time()
 is_gevent = False
+
+lock = threading.Lock()
 
 def func():
     global task_num
     client = ParamikoClient('config.ini')
     print client.connect()
     client.run_command('date')
+    lock.acquire()
     task_num -= 1
     if task_num == 0:
         print 'elaspe ', time.time()-begin
+    lock.release()
 
 def gevent_func():
     global task_num
@@ -29,6 +34,11 @@ def gevent_func():
     task_num -= 1
     if task_num == 0:
         print 'elaspe ', time.time()-begin
+
+def multi_thread_test():
+    global  task_num
+    for i in range(task_num):
+        threading.Thread(target=func).start()
 
 def multi_process_test():
     pool = Pool()
@@ -80,6 +90,7 @@ def test_get():
                     if name not in files:
                         sftp.get(remote_pre+name, local_pre+name)
 if __name__ == '__main__':
-    test_gevent()
+    #test_gevent()
     #test_get()
-    #test_seq_task()
+    test_seq_task()
+    #multi_thread_test()
