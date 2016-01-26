@@ -17,6 +17,8 @@ def func(call_arg_str):
     client = ParamikoClient('config.ini')
     print client.connect()
     client.run_command('date')
+    cmd_list = {'su', 'root'}
+    client.run_multi_seq_command(cmd_list)
     lock.acquire()
     task_num -= 1
     if task_num == 0:
@@ -52,4 +54,4 @@ def multi_process_test():
 
 
 if __name__ == '__main__':
-    multi_process_test()
+    func('test')

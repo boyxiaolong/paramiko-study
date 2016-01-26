@@ -13,6 +13,7 @@ class ParamikoClient(object):
         self.timeout = config.getfloat(pre_str, 'timeout')
         self.sftp_client = None
         self.is_connected = False
+        self.shell = None
 
     def connect(self):
         self.client = paramiko.SSHClient()
@@ -37,6 +38,14 @@ class ParamikoClient(object):
     def get_naive_client(self):
         return self.client
 
+    def run_multi_seq_command(self, cmd_list):
+        if not self.shell:
+            self.shell = self.client.invoke_shell()
+
+        for cmd in cmd_list:
+            self.shell.send(cmd+'\n')
+            receive_buf = self.shell.recv(1024)
+            print receive_buf
     def get_sftp_client(self):
         if self.is_connected == False:
             self.connect()
