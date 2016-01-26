@@ -12,6 +12,15 @@ is_gevent = False
 
 lock = threading.Lock()
 
+def django_fun():
+    client = ParamikoClient('config.ini')
+    client.connect()
+    remote_dir_name = '/home/sky/hailong/django_operate/'
+    remote_file_name = remote_dir_name + 'django_blog.tar.gz'
+    client.upload_file('/Users/allen/alog/django_blog.tar.gz'
+                       , remote_file_name)
+    client.run_command('tar -xzvf '+remote_file_name+' -C '+ remote_dir_name)
+
 def func(call_arg_str):
     global task_num
     client = ParamikoClient('config.ini')
@@ -54,4 +63,4 @@ def multi_process_test():
 
 
 if __name__ == '__main__':
-    func('test')
+    django_fun()

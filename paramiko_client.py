@@ -1,10 +1,11 @@
 import paramiko
 import ConfigParser
 
+
 class ParamikoClient(object):
     def __init__(self, ini_file):
         config = ConfigParser.ConfigParser()
-        pre_str = 'ssh1'
+        pre_str = 'ssh2'
         config.read(ini_file)
         self.host = config.get(pre_str, 'host')
         self.port = config.getint(pre_str, 'port')
@@ -55,4 +56,5 @@ class ParamikoClient(object):
 
     def upload_file(self, local_file, remote_file):
         self.get_sftp_client().put(local_file, remote_file)
+
 
