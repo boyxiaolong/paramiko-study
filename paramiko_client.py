@@ -11,12 +11,15 @@ class ParamikoClient(object):
         self.usr = config.get(pre_str, 'usr')
         self.pwd = config.get(pre_str, 'pwd')
         self.timeout = config.getfloat(pre_str, 'timeout')
+        self.sftp_client = None
+        self.is_connected = False
 
     def connect(self):
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         try:
             self.client.connect(hostname=self.host, port=self.port, username=self.usr, password=self.pwd, timeout=self.timeout)
+            self.is_connected = True
             return True
         except Exception,e:
             print 'caught ', e
@@ -33,3 +36,14 @@ class ParamikoClient(object):
 
     def get_naive_client(self):
         return self.client
+
+    def get_sftp_client(self):
+        if self.is_connected == False:
+            self.connect()
+        if not self.sftp_client:
+            self.sftp_client = paramiko.SFTPClient.from_transport(self.client.get_transport())
+        return self.sftp_client
+
+    def upload_file(self, local_file, remote_file):
+        self.get_sftp_client().put(local_file, remote_file)
+
