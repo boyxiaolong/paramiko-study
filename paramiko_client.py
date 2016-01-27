@@ -1,5 +1,6 @@
 import paramiko
 import ConfigParser
+import time
 
 
 class ParamikoClient(object):
@@ -22,6 +23,7 @@ class ParamikoClient(object):
         try:
             self.client.connect(hostname=self.host, port=self.port, username=self.usr, password=self.pwd, timeout=self.timeout)
             self.is_connected = True
+            self.shell = self.client.invoke_shell()
             return True
         except Exception,e:
             print 'caught ', e
@@ -45,6 +47,7 @@ class ParamikoClient(object):
 
         for cmd in cmd_list:
             self.shell.send(cmd+'\n')
+            time.sleep(0.5)
             receive_buf = self.shell.recv(1024)
             print receive_buf
     def get_sftp_client(self):
@@ -56,5 +59,6 @@ class ParamikoClient(object):
 
     def upload_file(self, local_file, remote_file):
         self.get_sftp_client().put(local_file, remote_file)
+
 
 

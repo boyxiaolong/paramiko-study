@@ -20,6 +20,9 @@ class DjangoOperation:
     def __init__(self, paramiko_client):
         self.paramiko_client = paramiko_client
 
+    def init_machine(self):
+        self.paramiko_client.run_command('mkdir /home/allen/django_operate')
+        self.paramiko_client.run_command('mkdir /home/allen/django_operate/')
     def do_cmd(self):
         self.paramiko_client.run_command("tar zxf /home/allen/django.tar.gz")
         self.paramiko_client.run_command("pip install -r requirements.txt")
