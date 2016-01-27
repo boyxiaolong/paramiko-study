@@ -19,8 +19,9 @@ def django_fun():
                 , 'ls'
                 , 'source env/bin/activate'
                 , 'cd django_blog'
-                , 'pip install -r requirements.txt'
-                , 'python manage.py chcek']
+                , 'ls'
+                #, 'pip install -r requirements.txt'
+                , 'python manage.py runserver']
     client.run_multi_seq_command(cmd_list)
 
 def func(call_arg_str):
