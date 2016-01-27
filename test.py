@@ -15,15 +15,13 @@ lock = threading.Lock()
 def django_fun():
     client = ParamikoClient('config.ini')
     client.connect()
-    remote_dir_name = '/home/sky/hailong/django_operate/'
-    remote_file_name = remote_dir_name + 'django_blog.tar.gz'
-    client.upload_file('/Users/allen/alog/django_blog.tar.gz', remote_file_name)
-    client.run_command('tar -xzvf '+remote_file_name+' -C '+ remote_dir_name)
-    client.run_command('source ' + remote_dir_name + 'env/bin/active')
-    django_dir = remote_dir_name + 'django_blog/'
-    python_dir = remote_dir_name + 'env/bin/python'
-    client.run_command('pip install -r ' + remote_dir_name + 'django_blog/' + 'requirements.txt')
-    client.run_command(python_dir + django_dir + 'manage.py ' + 'check')
+    cmd_list = ['cd ~/hailong/django_operate'
+                , 'ls'
+                , 'source env/bin/activate'
+                , 'cd django_blog'
+                , 'pip install -r requirements.txt'
+                , 'python manage.py chcek']
+    client.run_multi_seq_command(cmd_list)
 
 def func(call_arg_str):
     global task_num
@@ -67,4 +65,4 @@ def multi_process_test():
 
 
 if __name__ == '__main__':
-    func('test')
+    django_fun()
